@@ -15,7 +15,10 @@ public class Classify {
     static double b2[][] = new double[n_y][1] ;
     static double learningRate = 0.02 ;
     static double z1[][] = new double[n_h][800], a1[][] = new double[n_h][800] ;
-    static double z2[][] = new double[n_y   ][800], a2[][] = new double[n_y][800] ;
+    static double z2[][] = new double[n_y][800], a2[][] = new double[n_y][800] ;
+    static double cost ;
+    static double trainData_T[][] = new double[4][800], y[][] = new double[3][800] ;
+    static double dw2[][] = new double[3][800],db2[][] = new double[3][1],dw1[][] = new double[800][4],db1[][] = new double[800][1] ;
     
     Classify()
     {
@@ -99,6 +102,29 @@ public class Classify {
         }
     }
     
+    public static void getTranspose()
+    {
+        //transpose of feature array
+        for (int i = 0; i < 800; ++i)
+        {
+            for (int j = 0; j < 4; ++j)
+            {
+                trainData_T[j][i] = trainData[i][j];
+            }
+        }
+        //transpose of trainLabel
+        
+        for (int i = 0; i < 800; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                y[j][i] = trainLabel[i][j];
+            }
+        }
+        
+    }
+
+       
     public static void splitData()
     {
         int k = 0 ;
@@ -232,17 +258,7 @@ public class Classify {
     }
 
     public static void forwardPropagation()
-    {
-        double trainData_T[][] = new double[4][800] ;
-        //transpose of feature array
-        for (int i = 0; i < 800; ++i)
-        {
-            for (int j = 0; j < 4; ++j)
-            {
-                trainData_T[j][i] = trainData[i][j];
-            }
-        }
-        
+    {   
         //z1 = np.dot(w1, x) + b1
         double sum=0;
         for (int c = 0; c < 800; c++)
@@ -281,13 +297,85 @@ public class Classify {
                 sum = 0;
             }
         }
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                z2[c][d] = z2[c][d] + b2[c][0];
+            }
+        }
         
         //a2 = softmax(z2)
         softmax() ;
     } 
     
+    public static void costFunction()
+    {
+        //    cost = -(1/m)*np.sum(y*np.log(a2))        
+        double sum = 0 ; 
+        //    log(a2))
+        double log_a2[][] = new double[n_y][800], y_log_a2[][] = new double[3][800] ;
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                log_a2[c][d] = Math.log(a2[c][d]) ;
+            }
+        }      
+        //    y*log(a2)
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                y_log_a2[c][d] = y[c][d]*log_a2[c][d] ;               
+            }
+        }
+        //    sum(y*log(a2))
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                sum = sum + y_log_a2[c][d] ;               
+            }
+        }
+        
+        cost = -(1/800.0)*sum ;    
+    }
+    
     public static void backwardPropagation()
     {
+        double dz2[][] = new double[3][800] , dz1[][] = new double[800][800] , a1_T[][] = new double[800][n_h];
+        //dz2 = (a2 - y)
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                dz2[c][d] = a2[c][d] - y[c][d] ;               
+            }
+        }
+        //dw2 = (1/m)*np.dot(dz2, a1.T)
+        for (int i = 0; i < 800; ++i)
+        {
+            for (int j = 0; j < n_h; ++j)
+            {
+                a1_T[j][i] = a1[i][j];
+            }
+        }
+        double sum=0;
+        for (int c = 0; c < 3; c++)
+        {
+            for (int d = 0; d < 800; d++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    sum = sum + dz2[c][k] * a1_T[k][d];
+                }
+                dz2[c][d] = sum;
+                dz2[c][d] = dz2[c][d]/800.0 ;
+                sum = 0;
+            }
+        }
+        
         
     }
     
@@ -310,19 +398,22 @@ public class Classify {
 //        printData() ;
         
         splitData() ;  
+        getTranspose() ;
         initialize_parameters() ;
         forwardPropagation() ;
+        costFunction() ;
+        System.out.print(cost) ;
 
 //        model(iterations , learningRate);  
 
-        for(int i = 0 ; i < 3 ; i++)
-        {
-            for(int j = 0 ; j < 800 ; j++)
-            {
-                System.out.print(a2[i][j] + " ") ;
-            } 
-            System.out.println() ;
-        }
+//        for(int i = 0 ; i < 3 ; i++)
+//        {
+//            for(int j = 0 ; j < 800 ; j++)
+//            {
+//                System.out.print(a2[i][j] + " ") ;
+//            } 
+//            System.out.println() ;
+//        }
 
            
     }    
