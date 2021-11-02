@@ -532,6 +532,7 @@ public class Classify {
 //                System.out.print(b2[i][j] + " ") ;
 //            } 
 //            System.out.println() ;
-//        }           
+//        }      
+        
     }    
 }
