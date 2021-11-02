@@ -13,19 +13,21 @@ public class Classify {
     static double b1[][] = new double[n_h][1] ;
     static double w2[][] = new double[n_y][n_h] ; 
     static double b2[][] = new double[n_y][1] ;
-    static double learningRate = 0.002 ;
+    static double learningRate = 0.05 ;
     static double z1[][] = new double[n_h][800], a1[][] = new double[n_h][800] ;
     static double z2[][] = new double[n_y][800], a2[][] = new double[n_y][800] ;
     static double cost ;
     static double trainData_T[][] = new double[4][800], y[][] = new double[3][800] ;
     static double dw2[][] = new double[3][800],db2[][] = new double[3][1],dw1[][] = new double[800][4],db1[][] = new double[800][1] ;
     static double d_a1[][] = new double[n_h][800] ;
+    static int labels[] = new int[800] ;
     
     Classify()
     {
         conn ccc = new conn();
         len = 0 ;
         i=0;
+        int temp = 0 ;
         try 
         {           
             String query1 = "select * from students";                
@@ -73,6 +75,12 @@ public class Classify {
                 }
                 
                 l+=1 ;
+                
+                if(temp<800)
+                {
+                    labels[temp] = rs2.getInt(1) ;
+                    temp+=1 ;
+                }
             }
            
         }catch(Exception e){
@@ -485,6 +493,62 @@ public class Classify {
             }
         }
     }
+    
+    public static void accuracy()
+    {
+        int train_matrix[] = new int[800] ;
+        forwardPropagation() ;
+        for (int c = 0; c < 800; c++)
+        {           
+            if(a2[0][c] > a2[1][c] & a2[0][c] > a2[2][c])
+            {
+                train_matrix[c] = 0 ;
+            }
+            else if(a2[1][c] > a2[0][c] & a2[1][c] > a2[2][c])
+            {
+                train_matrix[c] = 1 ;
+            }
+            else if(a2[2][c] > a2[0][c] & a2[2][c] > a2[1][c])
+            {
+                train_matrix[c] = 2 ;
+            }
+            else if(a2[0][c] > a2[1][c] & a2[1][c] == a2[2][c])
+            {
+                train_matrix[c] = 0 ;
+            }
+            else if(a2[1][c] > a2[0][c] & a2[0][c] == a2[2][c])
+            {
+                train_matrix[c] = 1 ;
+            }
+            else if(a2[2][c] > a2[1][c] & a2[1][c] == a2[0][c])
+            {
+                train_matrix[c] = 2 ;
+            }
+            else if(a2[1][c] == a2[2][c] & a2[1][c] > a2[2][c])
+            {
+                train_matrix[c] = 0 ;
+            }
+            else if(a2[0][c] == a2[2][c] & a2[1][c] > a2[2][c])
+            {
+                train_matrix[c] = 1 ;
+            }
+            else if(a2[1][c] == a2[2][c] & a2[2][c] > a2[0][c])
+            {
+                train_matrix[c] = 2 ;
+            }
+        }
+        int count = 0 ;
+        for (int c = 0; c < 800; c++)
+        {
+            if(train_matrix[c]==labels[c])
+            {
+                count+=1 ;
+            }
+        }
+        System.out.println("Training accuracy is " + (count/800.0)*100) ;
+        
+        
+    }
        
     public static void model()
     {
@@ -524,6 +588,7 @@ public class Classify {
 //        System.out.print(cost) ;
 
         model() ;
+        accuracy() ;
 //
 //        for(int i = 0 ; i < 3 ; i++)
 //        {
@@ -532,7 +597,11 @@ public class Classify {
 //                System.out.print(b2[i][j] + " ") ;
 //            } 
 //            System.out.println() ;
-//        }      
-        
+//        }  
+//        for(int j = 0 ; j < 800 ; j++)
+//        {
+//            System.out.print(labels[j] + " ") ;
+//        } 
     }    
 }
+
