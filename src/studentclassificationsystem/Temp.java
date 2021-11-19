@@ -10,7 +10,7 @@ class Temp extends Segment implements ActionListener{
     JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,l20,l21,l22,l23;
     JButton b1,b2;
     ImageIcon icon;
-//    String stuId = new String("90.00504"),ploe,tp,ms,rds,ws ;
+//    String stuId = new String("90.00504"),ploe,tp,ms,rds,ws ; 
    
     Temp(){
         double arr1[] = new double[9] ;
