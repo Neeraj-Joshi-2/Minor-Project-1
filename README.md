@@ -16,7 +16,7 @@ NEED OF SYSTEM
 To manage enormous amounts of data, it becomes important to include a managing tool. A Student Classification System is a solution to the problem of manually inspecting and classifying data. The Student Classification System is a solution tool that is designed to maintain and segment the data and can be used for predicting the class/segment of the new record.
 
 
-                                                                    Motivation
+                                                                  Motivation
 
 Managing an entire database, analyzing and segmenting the students and  classifying the segment for new students can be quite hectic, and chaotic, especially when you are doing it manually. One can only imagine how tough it can be to manually read and analyze the whole database. Working with mountains of data which contains student’s info , scores in various activities , and more is time consuming, requires a great manual effort and can be overwhelming, to say the least. 
 
