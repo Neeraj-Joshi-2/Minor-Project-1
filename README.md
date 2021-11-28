@@ -10,7 +10,7 @@ For classification, the neural network algorithm needs labels of the training da
 
        
 
-                                                      Need of System
+                                                     Need of System
 
 To manage enormous amounts of data, it becomes important to include a managing tool. A Student Classification System is a solution to the problem of manually inspecting and classifying data. The Student Classification System is a solution tool that is designed to maintain and segment the data and can be used for predicting the class/segment of the new record.
 
