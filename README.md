@@ -1,4 +1,4 @@
-                                                                  Introduction
+                                                           Introduction
 
 The Student Classification System enables the user to enter the data of the students and based on the details entered the user can form the segments of students belonging to the same category having similar skills. Along with this the user can view the data or can remove a particular student from the record table stored in MySQL database(using jdbc) by entering his/her id in an user interface way made by applying the concept of Java Swing. The segments will  be formed on the features such as test preparation, parental level of education, gender, math score, reading score and writing score. 
 
